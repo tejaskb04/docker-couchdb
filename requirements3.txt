@@ -12,6 +12,7 @@ jinja2==2.8
 MarkupSafe==0.23          # via jinja2
 nose==1.3.7
 pip-tools==1.6.5
+requests==2.10.0
 six==1.10.0               # via pip-tools
 
 # This is forced down here, because pip is applying that option to other packages
