@@ -1,0 +1,9 @@
+# IDE settings
+.idea
+*.iml
+
+# Our Python environment
+env35
+
+# Compiled Python
+*.pyc
