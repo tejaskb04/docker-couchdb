@@ -14,7 +14,7 @@ FROM {{ current_dockerfile_config.base_image }}
 ############################################################################ -#}
 {% include 'base/environment.Dockerfile' %}
 
-{% include 'base/apt-get-install.Dockerfile' %}
+{% include 'base/apt-get-essentials.Dockerfile' %}
 
 {# #############################################################################
 # Different runtimes we may want to include.
