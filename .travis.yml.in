@@ -38,6 +38,7 @@ install:
 {%- endfor %}
 
 script:
+  - docker-compose -f tests/test-compose.yml build
   - docker-compose -f tests/test-compose.yml up -d
   - nosetests
 {# This comment gives us a newline at the end of the generated file #}
