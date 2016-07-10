@@ -23,4 +23,31 @@ FROM {{ current_dockerfile_config.base_image }}
 # {% include 'base/ruby.Dockerfile' %}
 # {% include 'base/node.Dockerfile' %}
 ############################################################################ -#}
+{% include 'base/python.Dockerfile' %}
+
+################################################################################
+# Install Python packages.
+################################################################################
+COPY requirements3.txt /docker-couchdb-temp/requirements3.txt
+RUN dos2unix /docker-couchdb-temp/requirements3.txt && \
+    pip install -r /docker-couchdb-temp/requirements3.txt
+
+################################################################################
+# Configure our secrets in CouchDB's local.ini.
+################################################################################
+COPY docker-couchdb/local.ini /docker-couchdb-temp/local.ini
+RUN dos2unix /docker-couchdb-temp/local.ini
+
+COPY docker-couchdb/apply_secrets.py /docker-couchdb-temp/apply_secrets.py
+RUN dos2unix /docker-couchdb-temp/apply_secrets.py
+
+################################################################################
+# Set up our entrypoint script, which wraps the script from our base.
+################################################################################
+COPY docker-couchdb/docker-couchdb-entrypoint.sh /docker-couchdb-entrypoint.sh
+RUN dos2unix /docker-couchdb-entrypoint.sh && \
+    chmod +x /docker-couchdb-entrypoint.sh
+
+ENTRYPOINT ["/docker-couchdb-entrypoint.sh"]
+CMD ["couchdb"]
 {# This comment gives us a newline at the end of the generated file #}
