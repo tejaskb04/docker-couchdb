@@ -35,6 +35,7 @@ install:
   - docker build -f Dockerfile .
 
 script:
-  - docker-compose -f tests/test-compose.yml build
-  - docker-compose -f tests/test-compose.yml up -d
+  - invoke compile_localize_test_compose
+  - docker-compose -f tests/test-compose.localized.yml build
+  - docker-compose -f tests/test-compose.localized.yml up -d
   - nosetests
