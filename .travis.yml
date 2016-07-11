@@ -35,5 +35,6 @@ install:
   - docker build -f Dockerfile .
 
 script:
+  - docker-compose -f tests/test-compose.yml build
   - docker-compose -f tests/test-compose.yml up -d
   - nosetests

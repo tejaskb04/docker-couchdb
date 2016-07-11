@@ -16,7 +16,7 @@ def setup():
             stdout=subprocess.PIPE
         )
 
-        BASE_DOCKER_IP = result.stdout.decode(sys.stdout.encoding).strip()
+        BASE_DOCKER_IP = result.stdout.decode('utf-8', 'backslashreplace').strip()
 
 
 def teardown():

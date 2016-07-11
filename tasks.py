@@ -5,6 +5,23 @@ import sys
 import yaml
 
 
+def check_result(result, description):
+    if result.failed:
+        print('========================================')
+        print('Failed to {}'.format(description))
+        print('')
+        print('========================================')
+        print('STDOUT:')
+        print('========================================')
+        print(result.stdout)
+        print('========================================')
+        print('STDERR:')
+        print('========================================')
+        print(result.stderr)
+        print('========================================')
+        raise Exception('Failed to {}'.format(description))
+
+
 @invoke.task()
 def compile_config():
     # Parse our compile config
@@ -35,11 +52,8 @@ def docker_machine_console():
     )
 
     # Invoke it
-    invoke.run(
-        command,
-        encoding=sys.stdout.encoding
-    )
-
+    result = invoke.run(command, encoding=sys.stdout.encoding)
+    check_result(result, 'launch docker console')
 
 @invoke.task()
 def docker_machine_ip():
@@ -53,10 +67,8 @@ def docker_machine_ip():
     )
 
     # Invoke it
-    result = invoke.run(
-        command,
-        encoding=sys.stdout.encoding
-    )
+    result = invoke.run(command, encoding=sys.stdout.encoding)
+    check_result(result, 'get docker IP')
 
 
 @invoke.task()
@@ -71,6 +83,17 @@ def docker_machine_start(file_compose='tests/test-compose.yml'):
         compile_config_yaml = yaml.safe_load(f)
 
     # Assemble our command
+    command = '"{}" "{}" docker-compose -f "{}" build'.format(
+        compile_config_yaml['config']['local']['docker']['cmd_bash'],
+        os.path.normpath(os.path.join(os.getcwd(), 'base/docker-machine/start.sh')).replace('\\', '/'),
+        os.path.normpath(os.path.join(os.getcwd(), file_compose)).replace('\\', '/')
+    )
+
+    # Invoke it
+    result = invoke.run(command, encoding=sys.stdout.encoding)
+    check_result(result, 'build docker-compose')
+
+    # Assemble our command
     command = '"{}" "{}" docker-compose -f "{}" up -d'.format(
         compile_config_yaml['config']['local']['docker']['cmd_bash'],
         os.path.normpath(os.path.join(os.getcwd(), 'base/docker-machine/start.sh')).replace('\\', '/'),
@@ -78,10 +101,8 @@ def docker_machine_start(file_compose='tests/test-compose.yml'):
     )
 
     # Invoke it
-    invoke.run(
-        command,
-        encoding=sys.stdout.encoding
-    )
+    result = invoke.run(command, encoding=sys.stdout.encoding)
+    check_result(result, 'launch docker-compose')
 
 
 @invoke.task()
@@ -98,10 +119,8 @@ def docker_machine_stop(file_compose='tests/test-compose.yml'):
     )
 
     # Invoke it
-    invoke.run(
-        command,
-        encoding=sys.stdout.encoding
-    )
+    result = invoke.run(command, encoding=sys.stdout.encoding)
+    check_result(result, 'stop docker-compose')
 
 
 @invoke.task
