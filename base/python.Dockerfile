@@ -8,7 +8,7 @@ ENV PYTHON_VERSION 3.5.2
 ENV PYTHON_PIP_VERSION 8.1.1
 
 # remove several traces of debian python
-RUN apt-get -q purge -y python.*
+RUN apt-get -qq purge -y python.*
 
 # gpg: key F73C700D: public key "Larry Hastings <larry@hastings.org>" imported
 ENV GPG_KEY 97FC712E4C024BBEA48A61ED3A5CA953F73C700D
