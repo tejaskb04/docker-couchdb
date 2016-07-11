@@ -40,6 +40,20 @@ def compile_config():
 
 
 @invoke.task()
+def compile_localize_test_compose():
+    # Compile our test compose configuration into a localized version
+    jinja2_environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(searchpath='.'),
+        undefined=jinja2.StrictUndefined
+    )
+    template = jinja2_environment.get_template('tests/test-compose.yml')
+    with open('tests/test-compose.localized.yml', 'w') as f:
+        f.write(template.render({
+            'CWD': os.path.normpath(os.getcwd()).replace('\\', '/')
+        }))
+
+
+@invoke.task()
 def docker_machine_console():
     # Parse our compile config
     with open('_compile-config.yml') as f:
@@ -77,8 +91,8 @@ def docker_machine_purge():
     pass
 
 
-@invoke.task()
-def docker_machine_start(file_compose='tests/test-compose.yml'):
+@invoke.task(pre=[compile_localize_test_compose])
+def docker_machine_start(file_compose='tests/test-compose.localized.yml'):
     # Parse our compile config
     with open('_compile-config.yml') as f:
         compile_config_yaml = yaml.safe_load(f)
@@ -106,8 +120,8 @@ def docker_machine_start(file_compose='tests/test-compose.yml'):
     check_result(result, 'launch docker-compose')
 
 
-@invoke.task()
-def docker_machine_stop(file_compose='tests/test-compose.yml'):
+@invoke.task(pre=[compile_localize_test_compose])
+def docker_machine_stop(file_compose='tests/test-compose.localized.yml'):
     # Parse our compile config
     with open('_compile-config.yml') as f:
         compile_config_yaml = yaml.safe_load(f)

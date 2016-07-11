@@ -8,7 +8,7 @@ ENV PYTHON_VERSION 3.5.2
 ENV PYTHON_PIP_VERSION 8.1.1
 
 # remove several traces of debian python
-RUN apt-get purge -y python.*
+RUN apt-get -q purge -y python.*
 
 # gpg: key F73C700D: public key "Larry Hastings <larry@hastings.org>" imported
 ENV GPG_KEY 97FC712E4C024BBEA48A61ED3A5CA953F73C700D
@@ -28,8 +28,9 @@ RUN set -ex \
 	&& ./configure \
 		--enable-loadable-sqlite-extensions \
 		--enable-shared \
-	&& make -j$(nproc) \
-	&& make install \
+		> python.make.configure.log \
+	&& make -j$(nproc) > python.make.log \
+	&& make install > python.make.install.log \
 	&& ldconfig \
     && curl -fSL 'https://bootstrap.pypa.io/get-pip.py' | python3 \
 	&& pip install --no-cache-dir --upgrade pip==$PYTHON_PIP_VERSION \
