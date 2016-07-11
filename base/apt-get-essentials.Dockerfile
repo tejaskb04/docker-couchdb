@@ -4,7 +4,8 @@
 # Based on: https://hub.docker.com/_/buildpack-deps/
 #
 
-RUN apt-get update && \
+RUN apt-get clean && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         # From jessie-curl
         # https://github.com/docker-library/buildpack-deps/blob/a0a59c61102e8b079d568db69368fb89421f75f2/jessie/curl/Dockerfile

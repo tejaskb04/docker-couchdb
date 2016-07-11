@@ -1,8 +1,8 @@
 {# #############################################################################
-# This file compiles to Dockerfile
+# This file compiles to Dockerfile.
 ############################################################################ -#}
 #
-# This file compiled from Dockerfile.in
+# This file compiled from Dockerfile.in.
 #
 
 {% set current_dockerfile_config = dockerfile.main -%}
