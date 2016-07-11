@@ -55,6 +55,7 @@ def docker_machine_console():
     result = invoke.run(command, encoding=sys.stdout.encoding)
     check_result(result, 'launch docker console')
 
+
 @invoke.task()
 def docker_machine_ip():
     # Parse our compile config
