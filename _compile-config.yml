@@ -20,7 +20,7 @@ config:
     main:
       file: Dockerfile
       context: .
-      base_image: ubuntu:14.04
+      base_image: couchdb:1.6.1
 
 jinja2:
   entries:

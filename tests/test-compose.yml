@@ -1,7 +1,6 @@
 main:
   build: ..
-
-nginxproxy:
-  image: "nginx"
   ports:
-    - "80:80"
+    - "80:5984"
+  volumes:
+    - "{{ CWD }}/tests/test-secrets/secrets.yml:/docker-couchdb-secrets/secrets.yml"
